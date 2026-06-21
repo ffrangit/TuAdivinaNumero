@@ -1,10 +1,14 @@
 #include <iostream>
 #include <random>
+#include <string>
+#include <algorithm>
+#include <cctype>
 
 int main() {
 
     int numeroSecreto;
     int intento;
+    std::string entrada;
     int cantidadIntentos = 0;
 
     std::random_device rd;
@@ -17,14 +21,20 @@ int main() {
     do {
 
         std::cout << "Adivina mi numero: ";
-        std::cin >> intento;
+        std::getline(std::cin, entrada);
+        entrada.erase(std::remove_if(entrada.begin(), entrada.end(), ::isspace), entrada.end());
 
-        if (std::cin.fail()) {
+        try {
+            intento = std::stoi(entrada);
 
-            std::cout << "ERROR: Entrada invalida. Intenta solo con numeros del 1 al 100.\n";
+            if (entrada != std::to_string(intento)) {
+                std::cout << "ERROR: Entrada invalida, escribe solo numeros.\n";
+                continue;
+            }
+        }
 
-            std::cin.clear();
-            std::cin.ignore(1000, '\n');
+        catch (...) {
+            std::cout << "ERROR: Intenta solo numeros del 1 al 100.\n";
             continue;
         }
 
@@ -50,4 +60,3 @@ int main() {
 
     return 0;
 }
-
